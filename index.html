@@ -9,15 +9,38 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
+        <button onclick="spaRedirect('/xdlmfao/pogu')"> xdlmfao/pogu </button> 
+    <button onclick="spaRedirect('/neki/neki')"> neki/neki </button>
+    <button onclick="spaRedirect('/index.html')"> index.html </button>
+
     <div id="main">
         <div id="main_title">
             <h1>Welcome you fucking autistic weeb.</h1>
-            <button id="normal-button">I am normal</button>
+            <button id="normal-button" onclick="onNormalButtonClick">I am normal</button>
         </div>
     </div>
 </body>
 <script>
+    function onNormalButtonClick() {
 
+    }
+          function redirectIfNeeded() {
+            if (window.location.href.includes("#")) return;
+            window.location.href = window.location.href + '#/';
+        }
+        function doRenderingPageContentStuff() {
+            const path = window.location.href.split('#').filter((v,i,a)=>i!=0).join('');
+
+            console.log(`im @ ${path}`);
+        }
+        function spaRedirect(path) {
+            window.location.href = `${window.location.href.split('#')[0]}#${path}`;
+            doRenderingPageContentStuff(); 
+        }
+
+
+        redirectIfNeeded();
+        doRenderingPageContentStuff();
 </script>
 
 <style>
