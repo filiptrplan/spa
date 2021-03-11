@@ -9,25 +9,54 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <button onclick="spaRedirect('/xdlmfao/pogu')"> xdlmfao/pogu </button> 
-    <button onclick="spaRedirect('/neki/neki')"> neki/neki </button>
-    <button onclick="spaRedirect('/index.html')"> index.html </button>
-
-
+    <based-page data-url="/index.html">
+        <h1>index.html</h1>
+        <button onclick="spaRedirect('/test1.html')">Goto TEST1</button>
+        <button onclick="spaRedirect('/test2.html')">Goto TEST2</button>
+        <button onclick="spaRedirect('/404')">crash and burn</button>
+    </based-page>
+    <based-page data-url="/test1.html">
+        <h1>test1.html</h1>
+        <button onclick="spaRedirect('/index.html')">Goto INDEX</button>
+        <button onclick="spaRedirect('/test2.html')">Goto TEST2</button>
+        <button onclick="spaRedirect('/404')">crash and burn</button>
+    </based-page>
+    <based-page data-url="/test2.html">
+        <h1>test2.html</h1>
+        <button onclick="spaRedirect('/test1.html')">Goto TEST1</button>
+        <button onclick="spaRedirect('/index.html')">Goto INDEX</button>
+        <button onclick="spaRedirect('/404')">crash and burn</button>
+    </based-page>
     <div id="main">
-        <div id="main_title">
-            <h1>Welcome you fucking autistic weeb.</h1>
-        </div>
     </div>
 </body>
     <script>
+        class BasedPage extends HTMLElement {
+            constructor() {
+                super();
+            }
+        }
+
+        customElements.define('based-page',BasedPage);
+        
+        var pages = {};
+
         function redirectIfNeeded() {
             if (window.location.href.includes("#")) return;
             window.location.href = window.location.href + '#/';
         }
+        function setupPage() {
+            let elements = Array.from(document.querySelector('body').querySelectorAll('based-page'));
+            elements.forEach(x=>{
+                pages[x.dataset['url']] = x.innerHTML;
+                x.parentElement.removeChild(x); //b1g code 😎
+            });
+        }
         function doRenderingPageContentStuff() {
             const path = window.location.href.split('#').filter((v,i,a)=>i!=0).join('');
+            console.log({path,pages});
+            console.log(pages[path]);
+            document.querySelector('#main').innerHTML = pages[path] || `<h1 style="color:red;">B1G error 404 our coders cant find your page</h1><p>Big sad :(</p>`
 
             console.log(`im @ ${path}`);
         }
@@ -35,28 +64,10 @@
             window.location.href = `${window.location.href.split('#')[0]}#${path}`;
             doRenderingPageContentStuff(); 
         }
-
-
+        
+        window.addEventListener('popstate',doRenderingPageContentStuff);
         redirectIfNeeded();
+        setupPage();
         doRenderingPageContentStuff();
     </script>    
-<style>
-html, body {
-    font-family: 'Noto Sans', sans-serif;
-    background-color: #303030;
-    color: #f5f5f5;
-}
-
-#main {
-    height: 100vh;
-    display: flex;
-  align-items: center;
-}
-
-#main_title {
-    text-align: center;
-    width: 100%;
-    font-size: 3rem;
-}
-</style>
 </html>
