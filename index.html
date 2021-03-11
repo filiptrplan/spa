@@ -9,15 +9,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <button onclick="spaRedirect('/xdlmfao/pogu')"> xdlmfao/pogu </button> 
+        <button onclick="spaRedirect('/xdlmfao/pogu')"> xdlmfao/pogu </button> 
     <button onclick="spaRedirect('/neki/neki')"> neki/neki </button>
     <button onclick="spaRedirect('/index.html')"> index.html </button>
-
 
     <div id="main">
         <div id="main_title">
             <h1>Welcome you fucking autistic weeb.</h1>
+            <button id="normal-button" onclick="onNormalButtonClick">I am normal</button>
         </div>
     </div>
     <footer>
@@ -25,8 +24,8 @@
         <a href="https://discord.gg/emdypGmzgn">Join discord</a>
     </footer>
 </body>
-    <script>
-            document
+<script>
+    document
 .querySelector (
             `
             .kek`
@@ -40,7 +39,10 @@
                     window.location.replace('https://nhentai.net/random')
 }
                                 )
-        function redirectIfNeeded() {
+    function onNormalButtonClick() {
+
+    }
+          function redirectIfNeeded() {
             if (window.location.href.includes("#")) return;
             window.location.href = window.location.href + '#/';
         }
@@ -57,16 +59,33 @@
 
         redirectIfNeeded();
         doRenderingPageContentStuff();
-    </script>
-    <!-- my part, ploz no tuchy -->
-    <script>
+</script>
 
-    </script>
 <style>
 html, body {
     font-family: 'Noto Sans', sans-serif;
     background-color: #303030;
     color: #f5f5f5;
+}
+
+button {
+    font-family: 'Noto Sans', sans-serif;
+    background-color: transparent;
+    border: 2px solid white;
+    color: #f5f5f5;
+    padding: 20px;
+    font-size: 30px;
+    border-radius: 20px;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background-color: white;
+    color: #303030;
+}
+
+button:focus {
+    outline: none;
 }
 
 #main {
