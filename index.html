@@ -81,6 +81,8 @@
 </script>
 <script>
     var api = new Api()
+    var hostUrl = window.location.origin
+
     class BasedPage extends HTMLElement {
         constructor() {
             super();
@@ -107,6 +109,7 @@
 
     }
     function SPA_do_update_content_refresh_lol() {
+        if (!window.location.href.includes(hostUrl)) ret
         const path = window.location.href.split('#').filter((v, i, a) => i != 0).join('');
         console.log({ path, pages });
         console.log(pages[path]);
