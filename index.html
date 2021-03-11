@@ -16,9 +16,9 @@
 <body>
     <based-page data-url="/">
         <h1>index.html</h1>
-        <button onclick="SPA_navigate('/test1.html')">Goto TEST1</button>
-        <button onclick="SPA_navigate('/test2.html')">Goto TEST2</button>
-        <button onclick="SPA_navigate('/404')">crash and burn</button>
+        <button onclick="uwuRouter.SPA_navigate('/test1.html')">Goto TEST1</button>
+        <button onclick="uwuRouter.SPA_navigate('/test2.html')">Goto TEST2</button>
+        <button onclick="uwuRouter.SPA_navigate('/404')">crash and burn</button>
         <div id="main_title">
             <h1>Welcome you fucking autistic weeb.</h1>
             <button id="normal-button" onclick="onNormalButtonClick()">
@@ -33,15 +33,15 @@
     </based-page>
     <based-page data-url="/test1.html">
         <h1>test1.html</h1>
-        <button onclick="SPA_navigate('/')">Goto INDEX</button>
-        <button onclick="SPA_navigate('/test2.html')">Goto TEST2</button>
-        <button onclick="SPA_navigate('/404')">crash and burn</button>
+        <button onclick="uwuRouter.SPA_navigate('/')">Goto INDEX</button>
+        <button onclick="uwuRouter.SPA_navigate('/test2.html')">Goto TEST2</button>
+        <button onclick="uwuRouter.SPA_navigate('/404')">crash and burn</button>
     </based-page>
     <based-page data-url="/test2.html">
         <h1>test2.html</h1>
-        <button onclick="SPA_navigate('/test1.html')">Goto TEST1</button>
-        <button onclick="SPA_navigate('/')">Goto INDEX</button>
-        <button onclick="SPA_navigate('/404')">crash and burn</button>
+        <button onclick="uwuRouter.SPA_navigate('/test1.html')">Goto TEST1</button>
+        <button onclick="uwuRouter.SPA_navigate('/')">Goto INDEX</button>
+        <button onclick="uwuRouter.SPA_navigate('/404')">crash and burn</button>
     </based-page>
     <based-page data-url="!FALLBACK"></based-page>
     <div id="main"></div>
@@ -89,8 +89,9 @@
         }
     }
 
+    var pages = {};
+
     class UwuRouter {
-        pages = {};
         constructor() {
             this.SPA_switch_to_shitty_history_mode();
             this.SPA_init_the_fucking_page();
@@ -101,12 +102,12 @@
         SPA_init_the_fucking_page() {
             let elements = Array.from(document.querySelector('body').querySelectorAll('based-page'));
             elements.forEach(x => {
-                this.pages[x.dataset['url']] = x.innerHTML;
+                pages[x.dataset['url']] = x.innerHTML;
                 x.parentElement.removeChild(x); //b1g code 😎
             });
 
-            if (this.pages['!FALLBACK']) return; // fallback/error page was defined in html
-            this.pages['!FALLBACK'] = `error`;
+            if (pages['!FALLBACK']) return; // fallback/error page was defined in html
+            pages['!FALLBACK'] = `error`;
         }
         SPA_switch_to_shitty_history_mode() {
             if (window.location.href.includes("#")) return;
@@ -115,13 +116,11 @@
         SPA_do_update_content_refresh_lol() {
             if (!window.location.href.includes(hostUrl)) return;
             const path = window.location.href.split('#').filter((v, i, a) => i != 0).join('');
-            console.log({ path, pages });
-            console.log(this.pages[path]);
-            document.querySelector('#main').innerHTML = this.pages[path] || this.pages['!FALLBACK']
+            document.querySelector('#main').innerHTML = pages[path] || pages['!FALLBACK']
         }
         SPA_navigate(path) {
             window.location.href = `${window.location.href.split('#')[0]}#${path}`;
-            SPA_do_update_content_refresh_lol();
+            this.SPA_do_update_content_refresh_lol();
         }
     }
 
