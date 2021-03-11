@@ -1,32 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Degeneracy</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap"
-        rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+        integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+        crossorigin="anonymous" />
 </head>
+
 <body>
-    <div id="main">
-        <button onclick="spaRedirect('/xdlmfao/pogu')">xdlmfao/pogu</button>
-        <button onclick="spaRedirect('/neki/neki')">neki/neki</button>
-        <button onclick="spaRedirect('/index.html')">index.html</button>
+    <based-page data-url="/">
+        <h1>index.html</h1>
+        <button onclick="SPA_navigate('/test1.html')">Goto TEST1</button>
+        <button onclick="SPA_navigate('/test2.html')">Goto TEST2</button>
+        <button onclick="SPA_navigate('/404')">crash and burn</button>
         <div id="main_title">
             <h1>Welcome you fucking autistic weeb.</h1>
             <button id="normal-button" onclick="onNormalButtonClick()">
                 I am normal
             </button>
         </div>
-    </div>
-    <footer>
-        <a href="https://discord.gg/emdypGmzgn" class="kek">Join discord</a>
-        <a href="https://discord.gg/emdypGmzgn">Join discord</a>
-    </footer>
+        <footer>
+            <a href="https://discord.gg/emdypGmzgn" class="kek">Join discord</a>
+            <a href="https://discord.gg/emdypGmzgn">Join discord</a>
+        </footer>
+        <button id="down-arrow-landing"><span class="fas fa-arrow-down"></span></button>
+    </based-page>
+    <based-page data-url="/test1.html">
+        <h1>test1.html</h1>
+        <button onclick="SPA_navigate('/')">Goto INDEX</button>
+        <button onclick="SPA_navigate('/test2.html')">Goto TEST2</button>
+        <button onclick="SPA_navigate('/404')">crash and burn</button>
+    </based-page>
+    <based-page data-url="/test2.html">
+        <h1>test2.html</h1>
+        <button onclick="SPA_navigate('/test1.html')">Goto TEST1</button>
+        <button onclick="SPA_navigate('/')">Goto INDEX</button>
+        <button onclick="SPA_navigate('/404')">crash and burn</button>
+    </based-page>
+    <based-page data-url="!FALLBACK"></based-page>
+    <div id="main"></div>
 </body>
 <script>
     var Api
@@ -63,6 +81,50 @@
 </script>
 <script>
     var api = new Api()
+    class BasedPage extends HTMLElement {
+        constructor() {
+            super();
+        }
+    }
+
+    customElements.define('based-page', BasedPage);
+
+    var pages = {};
+
+    function SPA_switch_to_shitty_history_mode() {
+        if (window.location.href.includes("#")) return;
+        window.location.href = window.location.href + '#/';
+    }
+    function SPA_init_the_fucking_page() {
+        let elements = Array.from(document.querySelector('body').querySelectorAll('based-page'));
+        elements.forEach(x => {
+            pages[x.dataset['url']] = x.innerHTML;
+            x.parentElement.removeChild(x); //b1g code 😎
+        });
+
+        if (pages['!FALLBACK']) return; // fallback/error page was defined in html
+        pages['!FALLBACK'] = `error`;
+
+    }
+    function SPA_do_update_content_refresh_lol() {
+        const path = window.location.href.split('#').filter((v, i, a) => i != 0).join('');
+        console.log({ path, pages });
+        console.log(pages[path]);
+        document.querySelector('#main').innerHTML = pages[path] || pages['!FALLBACK']
+
+        console.log(`im @ ${path}`);
+    }
+    function SPA_navigate(path) {
+        window.location.href = `${window.location.href.split('#')[0]}#${path}`;
+        SPA_do_update_content_refresh_lol();
+    }
+
+    window.addEventListener('popstate', SPA_do_update_content_refresh_lol);
+    SPA_switch_to_shitty_history_mode();
+    SPA_init_the_fucking_page();
+    SPA_do_update_content_refresh_lol();
+</script>
+<script>
     document
         .querySelector(`.kek`)
         .addEventListener("click", function (e) {
@@ -86,9 +148,8 @@
         console.log(`im @ ${path}`);
     }
     function spaRedirect(path) {
-        window.location.href = `${
-            window.location.href.split("#")[0]
-        }#${path}`;
+        window.location.href = `${window.location.href.split("#")[0]
+            }#${path}`;
         doRenderingPageContentStuff();
     }
 
@@ -103,6 +164,7 @@
         font-family: "Noto Sans", sans-serif;
         background-color: #303030;
         color: #f5f5f5;
+        font-size: 1.25em;
     }
 
     button {
@@ -125,10 +187,28 @@
         outline: none;
     }
 
+    a {
+        color: white;
+        transition: all 0.2s;
+    }
+
+    a:hover {
+        color: rgb(1, 85, 85);
+    }
+
+    #down-arrow-landing {
+        margin-top: 100px;
+        width: 100px;
+        height: 100px;
+        border-radius: 60px;
+    }
+
     #main {
         height: 900px;
         display: flex;
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
     }
 
     #main_title {
@@ -137,4 +217,5 @@
         font-size: 3rem;
     }
 </style>
+
 </html>
