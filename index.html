@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <based-page data-url="/index.html">
+    <based-page data-url="/">
         <h1>index.html</h1>
         <button onclick="SPA_navigate('/test1.html')">Goto TEST1</button>
         <button onclick="SPA_navigate('/test2.html')">Goto TEST2</button>
@@ -33,19 +33,56 @@
     </based-page>
     <based-page data-url="/test1.html">
         <h1>test1.html</h1>
-        <button onclick="SPA_navigate('/index.html')">Goto INDEX</button>
+        <button onclick="SPA_navigate('/')">Goto INDEX</button>
         <button onclick="SPA_navigate('/test2.html')">Goto TEST2</button>
         <button onclick="SPA_navigate('/404')">crash and burn</button>
     </based-page>
     <based-page data-url="/test2.html">
         <h1>test2.html</h1>
         <button onclick="SPA_navigate('/test1.html')">Goto TEST1</button>
-        <button onclick="SPA_navigate('/index.html')">Goto INDEX</button>
+        <button onclick="SPA_navigate('/')">Goto INDEX</button>
         <button onclick="SPA_navigate('/404')">crash and burn</button>
     </based-page>
+    <based-page data-url="!FALLBACK"></based-page>
     <div id="main"></div>
 </body>
 <script>
+    var Api
+    (function () {
+        Api = function () { }
+        Api.prototype.get = function (path, callback) { return this.request('GET', path, null, callback); };
+        Api.prototype.delete = function (path, callback) { return this.request('DELETE', path, null, callback); };
+        Api.prototype.post = function (path, request, callback) { return this.request('POST', path, request, callback); };
+        Api.prototype.put = function (path, request, callback) { return this.request('PUT', path, request, callback); };
+
+        Api.prototype.request = function (method, url, request = null, callback) {
+            if (!method || !url) return
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url)
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return
+
+                var respCode = xhr.status;
+                var respBody = xhr.responseText;
+
+                if (xhr.getResponseHeader('Content-Type') && xhr.getResponseHeader('Content-Type').indexOf('application/json') === 0) {
+                    try {
+                        respBody = JSON.parse(respBody);
+                    } catch (e) { console.error(e) }
+                }
+                return callback(respBody, respCode, xhr.getAllResponseHeaders())
+            }
+
+            xhr.send()
+        }
+    })()
+</script>
+<script>
+    var api = new Api()
+    var hostUrl = window.location.origin
+
     class BasedPage extends HTMLElement {
         constructor() {
             super();
@@ -67,17 +104,20 @@
                 this.pages[x.dataset['url']] = x.innerHTML;
                 x.parentElement.removeChild(x); //b1g code 😎
             });
+
+            if (this.pages['!FALLBACK']) return; // fallback/error page was defined in html
+            this.pages['!FALLBACK'] = `error`;
         }
         SPA_switch_to_shitty_history_mode() {
             if (window.location.href.includes("#")) return;
             window.location.href = window.location.href + '#/';
         }
         SPA_do_update_content_refresh_lol() {
+            if (!window.location.href.includes(hostUrl)) return;
             const path = window.location.href.split('#').filter((v, i, a) => i != 0).join('');
+            console.log({ path, pages });
             console.log(this.pages[path]);
-            document.querySelector('#main').innerHTML = this.pages[path] || `<h1 style="color:red;">B1G error 404 our coders cant find your page</h1><p>Big sad :(</p>`
-
-            console.log(`im @ ${path}`);
+            document.querySelector('#main').innerHTML = this.pages[path] || this.pages['!FALLBACK']
         }
         SPA_navigate(path) {
             window.location.href = `${window.location.href.split('#')[0]}#${path}`;
@@ -93,12 +133,6 @@
 
 </script>
 <script>
-    document
-        .querySelector(`.kek`)
-        .addEventListener("click", function (e) {
-            e.preventDefault();
-            window.location.replace("https://nhentai.net/random");
-        });
     function onNormalButtonClick() {
         alert("No you're fucking not.");
         window.location = "https://hanime.tv";
@@ -123,6 +157,7 @@
 
     redirectIfNeeded();
     doRenderingPageContentStuff();
+    api.get('https://jsonplaceholder.typicode.com/todos/1', (response) => console.log(response))
 </script>
 
 <style>
