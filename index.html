@@ -9,20 +9,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-        <button onclick="spaRedirect('/xdlmfao/pogu')"> xdlmfao/pogu </button> 
-    <button onclick="spaRedirect('/neki/neki')"> neki/neki </button>
-    <button onclick="spaRedirect('/index.html')"> index.html </button>
+
 
     <div id="main">
+                <button onclick="spaRedirect('/xdlmfao/pogu')"> xdlmfao/pogu </button> 
+    <button onclick="spaRedirect('/neki/neki')"> neki/neki </button>
+    <button onclick="spaRedirect('/index.html')"> index.html </button>
         <div id="main_title">
             <h1>Welcome you fucking autistic weeb.</h1>
-            <button id="normal-button" onclick="onNormalButtonClick">I am normal</button>
+            <button id="normal-button" onclick="onNormalButtonClick()">I am normal</button>
         </div>
     </div>
 </body>
 <script>
     function onNormalButtonClick() {
-
+        alert("No you're fucking not.")
+        window.location = "https://hanime.tv";
     }
           function redirectIfNeeded() {
             if (window.location.href.includes("#")) return;
@@ -71,7 +73,7 @@ button:focus {
 }
 
 #main {
-    height: 100vh;
+    height: 900px;
     display: flex;
   align-items: center;
 }
