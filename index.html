@@ -11,21 +11,21 @@
 <body>
     <based-page data-url="/index.html">
         <h1>index.html</h1>
-        <button onclick="spaRedirect('/test1.html')">Goto TEST1</button>
-        <button onclick="spaRedirect('/test2.html')">Goto TEST2</button>
-        <button onclick="spaRedirect('/404')">crash and burn</button>
+        <button onclick="SPA_navigate('/test1.html')">Goto TEST1</button>
+        <button onclick="SPA_navigate('/test2.html')">Goto TEST2</button>
+        <button onclick="SPA_navigate('/404')">crash and burn</button>
     </based-page>
     <based-page data-url="/test1.html">
         <h1>test1.html</h1>
-        <button onclick="spaRedirect('/index.html')">Goto INDEX</button>
-        <button onclick="spaRedirect('/test2.html')">Goto TEST2</button>
-        <button onclick="spaRedirect('/404')">crash and burn</button>
+        <button onclick="SPA_navigate('/index.html')">Goto INDEX</button>
+        <button onclick="SPA_navigate('/test2.html')">Goto TEST2</button>
+        <button onclick="SPA_navigate('/404')">crash and burn</button>
     </based-page>
     <based-page data-url="/test2.html">
         <h1>test2.html</h1>
-        <button onclick="spaRedirect('/test1.html')">Goto TEST1</button>
-        <button onclick="spaRedirect('/index.html')">Goto INDEX</button>
-        <button onclick="spaRedirect('/404')">crash and burn</button>
+        <button onclick="SPA_navigate('/test1.html')">Goto TEST1</button>
+        <button onclick="SPA_navigate('/index.html')">Goto INDEX</button>
+        <button onclick="SPA_navigate('/404')">crash and burn</button>
     </based-page>
     <div id="main">
     </div>
@@ -41,18 +41,18 @@
         
         var pages = {};
 
-        function redirectIfNeeded() {
+        function SPA_switch_to_shitty_history_mode() {
             if (window.location.href.includes("#")) return;
             window.location.href = window.location.href + '#/';
         }
-        function setupPage() {
+        function SPA_init_the_fucking_page() {
             let elements = Array.from(document.querySelector('body').querySelectorAll('based-page'));
             elements.forEach(x=>{
                 pages[x.dataset['url']] = x.innerHTML;
                 x.parentElement.removeChild(x); //b1g code 😎
             });
         }
-        function doRenderingPageContentStuff() {
+        function SPA_do_update_content_refresh_lol() {
             const path = window.location.href.split('#').filter((v,i,a)=>i!=0).join('');
             console.log({path,pages});
             console.log(pages[path]);
@@ -60,14 +60,14 @@
 
             console.log(`im @ ${path}`);
         }
-        function spaRedirect(path) {
+        function SPA_navigate(path) {
             window.location.href = `${window.location.href.split('#')[0]}#${path}`;
-            doRenderingPageContentStuff(); 
+            SPA_do_update_content_refresh_lol(); 
         }
         
-        window.addEventListener('popstate',doRenderingPageContentStuff);
-        redirectIfNeeded();
-        setupPage();
-        doRenderingPageContentStuff();
+        window.addEventListener('popstate',SPA_do_update_content_refresh_lol);
+        SPA_switch_to_shitty_history_mode();
+        SPA_init_the_fucking_page();
+        SPA_do_update_content_refresh_lol();
     </script>    
 </html>
