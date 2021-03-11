@@ -7,6 +7,29 @@
     <title>Degeneracy</title>
 </head>
 <body>
-    
+
+    <button onclick="spaRedirect('/xdlmfao/pogu')"> xdlmfao/pogu </button> 
+    <button onclick="spaRedirect('/neki/neki')"> neki/neki </button>
+    <button onclick="spaRedirect('/index.html')"> index.html </button>
+
+    <script>
+        function redirectIfNeeded() {
+            if (window.location.href.includes("#")) return;
+            window.location.href = window.location.href + '#/';
+        }
+        function doRenderingPageContentStuff() {
+            const path = window.location.href.split('#').filter((v,i,a)=>i!=0).join('');
+
+            console.log(`im @ ${path}`);
+        }
+        function spaRedirect(path) {
+            window.location.href = `${window.location.href.split('#')[0]}#${path}`;
+            doRenderingPageContentStuff(); 
+        }
+
+
+        redirectIfNeeded();
+        doRenderingPageContentStuff();
+    </script>    
 </body>
 </html>
