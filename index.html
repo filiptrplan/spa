@@ -12,12 +12,24 @@
         integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
         crossorigin="anonymous" />
 </head>
+
 <body>
     <based-page data-url="/index.html">
         <h1>index.html</h1>
         <button onclick="SPA_navigate('/test1.html')">Goto TEST1</button>
         <button onclick="SPA_navigate('/test2.html')">Goto TEST2</button>
         <button onclick="SPA_navigate('/404')">crash and burn</button>
+        <div id="main_title">
+            <h1>Welcome you fucking autistic weeb.</h1>
+            <button id="normal-button" onclick="onNormalButtonClick()">
+                I am normal
+            </button>
+        </div>
+        <footer>
+            <a href="https://discord.gg/emdypGmzgn" class="kek">Join discord</a>
+            <a href="https://discord.gg/emdypGmzgn">Join discord</a>
+        </footer>
+        <button id="down-arrow-landing"><span class="fas fa-arrow-down"></span></button>
     </based-page>
     <based-page data-url="/test1.html">
         <h1>test1.html</h1>
@@ -31,67 +43,48 @@
         <button onclick="SPA_navigate('/index.html')">Goto INDEX</button>
         <button onclick="SPA_navigate('/404')">crash and burn</button>
     </based-page>
-    <div id="main">
-        <div id="navigation-buttons">
-            <button onclick="spaRedirect('/xdlmfao/pogu')">xdlmfao/pogu</button>
-            <button onclick="spaRedirect('/neki/neki')">neki/neki</button>
-            <button onclick="spaRedirect('/index.html')">index.html</button>
-        </div>
-        <br>
-        <div id="main_title">
-            <h1>Welcome you fucking autistic weeb.</h1>
-            <button id="normal-button" onclick="onNormalButtonClick()">
-                I am normal
-            </button>
-        </div>
-        <footer>
-            <a href="https://discord.gg/emdypGmzgn" class="kek">Join discord</a>
-            <a href="https://discord.gg/emdypGmzgn">Join discord</a>
-        </footer>
-        <button id="down-arrow-landing"><span class="fas fa-arrow-down"></span></button>
-    </div>
-
+    <div id="main"></div>
 </body>
-    <script>
-        class BasedPage extends HTMLElement {
-            constructor() {
-                super();
-            }
+<script>
+    class BasedPage extends HTMLElement {
+        constructor() {
+            super();
         }
+    }
 
-        customElements.define('based-page',BasedPage);
-        
-        var pages = {};
+    customElements.define('based-page', BasedPage);
 
-        function SPA_switch_to_shitty_history_mode() {
-            if (window.location.href.includes("#")) return;
-            window.location.href = window.location.href + '#/';
-        }
-        function SPA_init_the_fucking_page() {
-            let elements = Array.from(document.querySelector('body').querySelectorAll('based-page'));
-            elements.forEach(x=>{
-                pages[x.dataset['url']] = x.innerHTML;
-                x.parentElement.removeChild(x); //b1g code 😎
-            });
-        }
-        function SPA_do_update_content_refresh_lol() {
-            const path = window.location.href.split('#').filter((v,i,a)=>i!=0).join('');
-            console.log({path,pages});
-            console.log(pages[path]);
-            document.querySelector('#main').innerHTML = pages[path] || `<h1 style="color:red;">B1G error 404 our coders cant find your page</h1><p>Big sad :(</p>`
+    var pages = {};
 
-            console.log(`im @ ${path}`);
-        }
-        function SPA_navigate(path) {
-            window.location.href = `${window.location.href.split('#')[0]}#${path}`;
-            SPA_do_update_content_refresh_lol(); 
-        }
-        
-        window.addEventListener('popstate',SPA_do_update_content_refresh_lol);
-        SPA_switch_to_shitty_history_mode();
-        SPA_init_the_fucking_page();
+    function SPA_switch_to_shitty_history_mode() {
+        if (window.location.href.includes("#")) return;
+        window.location.href = window.location.href + '#/';
+    }
+    function SPA_init_the_fucking_page() {
+        let elements = Array.from(document.querySelector('body').querySelectorAll('based-page'));
+        elements.forEach(x => {
+            pages[x.dataset['url']] = x.innerHTML;
+            x.parentElement.removeChild(x); //b1g code 😎
+        });
+    }
+    function SPA_do_update_content_refresh_lol() {
+        const path = window.location.href.split('#').filter((v, i, a) => i != 0).join('');
+        console.log({ path, pages });
+        console.log(pages[path]);
+        document.querySelector('#main').innerHTML = pages[path] || `<h1 style="color:red;">B1G error 404 our coders cant find your page</h1><p>Big sad :(</p>`
+
+        console.log(`im @ ${path}`);
+    }
+    function SPA_navigate(path) {
+        window.location.href = `${window.location.href.split('#')[0]}#${path}`;
         SPA_do_update_content_refresh_lol();
-    </script>    
+    }
+
+    window.addEventListener('popstate', SPA_do_update_content_refresh_lol);
+    SPA_switch_to_shitty_history_mode();
+    SPA_init_the_fucking_page();
+    SPA_do_update_content_refresh_lol();
+</script>
 <script>
     document
         .querySelector(`.kek`)
