@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <based-page data-url="/">
+    <based-page data-url="/" data-title="Home | Degeneracy">
         <h1>index.html</h1>
         <button onclick="uwuRouter.SPA_navigate('/test1.html')">Goto TEST1</button>
         <button onclick="uwuRouter.SPA_navigate('/test2.html')">Goto TEST2</button>
@@ -31,13 +31,13 @@
         </footer>
         <button id="down-arrow-landing"><span class="fas fa-arrow-down"></span></button>
     </based-page>
-    <based-page data-url="/test1.html">
+    <based-page data-url="/test1.html" data-title="Test 1| Degeneracy">
         <h1>test1.html</h1>
         <button onclick="uwuRouter.SPA_navigate('/')">Goto INDEX</button>
         <button onclick="uwuRouter.SPA_navigate('/test2.html')">Goto TEST2</button>
         <button onclick="uwuRouter.SPA_navigate('/404')">crash and burn</button>
     </based-page>
-    <based-page data-url="/test2.html">
+    <based-page data-url="/test2.html" data-title="Test 2 | Degeneracy">
         <h1>test2.html</h1>
         <button onclick="uwuRouter.SPA_navigate('/test1.html')">Goto TEST1</button>
         <button onclick="uwuRouter.SPA_navigate('/')">Goto INDEX</button>
@@ -102,12 +102,12 @@
         SPA_init_the_fucking_page() {
             let elements = Array.from(document.querySelector('body').querySelectorAll('based-page'));
             elements.forEach(x => {
-                pages[x.dataset['url']] = x.innerHTML;
+                pages[x.dataset['url']] = {html:x.innerHTML,title:x.dataset['title']||'page'};
                 x.parentElement.removeChild(x); //b1g code 😎
             });
 
-            if (pages['!FALLBACK']) return; // fallback/error page was defined in html
-            pages['!FALLBACK'] = `error`;
+            if (pages['!FALLBACK'].html && pages['!FALLBACK'].title) return; // fallback/error page was defined in html
+            pages['!FALLBACK'] = {html:`error`,title:'OH NO'};
         }
         SPA_switch_to_shitty_history_mode() {
             if (window.location.href.includes("#")) return;
@@ -116,7 +116,8 @@
         SPA_do_update_content_refresh_lol() {
             if (!window.location.href.includes(hostUrl)) return;
             const path = window.location.href.split('#').filter((v, i, a) => i != 0).join('');
-            document.querySelector('#main').innerHTML = pages[path] || pages['!FALLBACK']
+            document.querySelector('#main').innerHTML = pages[path]?.html || pages['!FALLBACK']?.html
+            document.title = pages[path]?.title || pages['!FALLBACK'].title;
         }
         SPA_navigate(path) {
             window.location.href = `${window.location.href.split('#')[0]}#${path}`;
