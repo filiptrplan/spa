@@ -39,6 +39,16 @@
     </based-page>
     <based-page data-url="/test2.html" data-title="Test 2 | Degeneracy">
         <h1>test2.html</h1>
+        <form action="http://waifu-storage.s3.amazonaws.com/" method="post" enctype="multipart/form-data">
+            Key to upload:
+            <input type="input"  name="key" value="filename" /><br />
+            <input type="hidden" name="acl" value="public-read" />
+            Content-Type:
+            <input type="input"  name="Content-Type" value="image/jpeg" /><br />
+            File:
+            <input type="file"   name="file" /> <br/>
+            <input type="submit" name="submit" value="Upload to Amazon S3" />
+        </form>
         <button onclick="uwuRouter.SPA_navigate('/test1.html')">Goto TEST1</button>
         <button onclick="uwuRouter.SPA_navigate('/')">Goto INDEX</button>
         <button onclick="uwuRouter.SPA_navigate('/404')">crash and burn</button>
