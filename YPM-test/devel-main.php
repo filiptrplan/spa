@@ -19,6 +19,38 @@ $YPM_VER = "v1";
 */
 class YPM
 {
+    /*
+        finds a package with $name in the file $src (path to a local file or url to a server)
+        copies it into the apropriate section in *this* file
+
+        there are 2 sections in a file 
+        `backend` and `frontend` 
+        (frontend packages get inserted into the main rendered document,
+         backend code gets inserted at the top or below the package manager code)
+
+        a section starts with `//ypm:packages:<section>:start`
+        and ends with         `//ypm:packages:<section>:end`
+
+        between theese 2 lines there are packages
+
+        a package starts with //ypm:package:<section>:<name>:<version>:start
+        and ends with         //ypm:package:<section>:end
+
+        the section part exists only so we know where to insert the module; it's only used internally
+
+        so to install / update a package we:
+        
+        1. download/open the src file
+        2. find a module by name (similar code can be found in RemovePackage)
+        3. parse the section name
+        4. find the section in *this* file
+        5. insert the module and write the changes
+
+    */
+    static public function InstallPackage($src,$name) {
+
+    }
+
     static public function GetPackages()
     {
         $file = file_get_contents(__FILE__); //read the source code of the current file
@@ -53,12 +85,6 @@ class YPM
         fwrite($handle, $source_code); //write the new source code
         fclose($handle);
     }
-
-    /*
-    static public function Remove() {
-
-    }
-    */
 }
 
 class FuckYouException extends Exception
